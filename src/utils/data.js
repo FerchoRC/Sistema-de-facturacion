@@ -1,4 +1,4 @@
-import { BarChart2, FileText, Mail, Sparkles } from "lucide-react";
+import { BarChart2, FileText, LayoutDashboard, Mail, Plus, Sparkles, Users } from "lucide-react";
 
 export const FEATURES = [
     {
@@ -73,4 +73,11 @@ export const FAQS = [
         question: "Qué tan segura es la información dentro de la app",
         answer: "Toda la información se protege con encriptación y copias de seguridad automáticas para garantizar tu seguridad y privacidad."
     }
+]
+
+export const NAVIGATION_MENU = [
+    {id: "dashboard", name: "Dashboard", icon: LayoutDashboard},
+    {id: "invoices", name: "Facturas", icon: FileText},
+    {id: "invoices/new", name: "Crear Factura", icon: Plus},
+    {id: "profile", name: "Perfil", icon: Users},
 ]

@@ -46,17 +46,159 @@ const SignUp = () => {
     confirmPassword: false,
   });
 
-  const validateName = (name) => {};
+  const validateName = (name) => {
+    if (!name) return "Usuario requerido";
+    if (name.length < 2) return "El usuario debe contener mas de 2 caracteres";
+    if (name.length > 50) return "El usuario debe ser menor a 50 caracteres";
+    return "";
+  };
   
-  const validateConfirmPassword = (confirmPassword, password) => {};
+  const validateConfirmPassword = (confirmPassword, password) => {
+    if (!confirmPassword) return "Porfavor confirma la contraseña";
+    if (confirmPassword !== password) return "Contraseña incorrecta";
+    return "";
+  };
 
-  const handleInputChange = (e) => {};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (touched[name]){
+      const newFieldErrors = { ...fieldErrors };
+      if (name === "name"){
+        newFieldErrors.name = validateName(value);
+      } else if (name === "email") {
+        newFieldErrors.email = validateEmail(value);
+      } else if (name === "password") {
+        newFieldErrors.password = validatePassword(value);
+        if(touched.confirmPassword) {
+          newFieldErrors.confirmPassword = validateConfirmPassword(
+            formData.confirmPassword,
+            value
+          );
+        }
+      } else if (name === "confirmPassword") {
+        newFieldErrors.confirmPassword = validateConfirmPassword(
+          value,
+          formData.password
+        );
+      }
+      setFieldErrors(newFieldErrors);
+    }
+    if (error) setError("");
+  };
 
-  const handleBlur = (e) => {};
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
+    const newFieldErrors = { ...fieldErrors };
+    if(name === "name") {
+      newFieldErrors.name = validateName(formData.name);
+    } else if (name === "email") {
+      newFieldErrors.email = validateEmail(formData.email);
+    } else if (name === "password") {
+      newFieldErrors.password = validatePassword(formData.password);
+    } else if (name === "confirmPassword") {
+      newFieldErrors.confirmPassword = validateConfirmPassword(
+        formData.confirmPassword,
+        formData.password
+      );
+    }
+    setFieldErrors(newFieldErrors);
+  };
 
-  const isFormValid = () => {};
+  const isFormValid = () => {
+    const nameError = validateName(formData.name);
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+    const confirmPasswordError = validateConfirmPassword(
+      formData.confirmPassword,
+      formData.password
+    );
+    return (
+      !nameError &&
+      !emailError &&
+      !passwordError &&
+      !confirmPasswordError &&
+      formData.name &&
+      formData.email &&
+      formData.password &&
+      formData.confirmPassword
+    );
+  };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    const nameError = validateName(formData.name);
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+    const confirmPasswordError = validateConfirmPassword(
+      formData.confirmPassword,
+      formData.password
+    );
+    if (nameError || emailError || passwordError || confirmPasswordError) {
+      setFieldErrors({
+        name: nameError,
+        email: emailError,
+        password: passwordError,
+        confirmPassword: confirmPasswordError,
+      });
+      setTouched({
+        name: true,
+        email: true,
+        password: true,
+        confirmPassword: true,
+      });
+      return;
+    }
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await axiosInstance.post(
+        API_PATHS.AUTH.REGISTER,
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+      const data =  response.data;
+      const { token } = data;
+
+      if (response.status === 201) {
+        setSuccess("Cuenta creada exitosamente");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setTouched({
+          name: false,
+          email: false,
+          password: false,
+          confirmPassword: false,
+        });
+        login(data, token);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("No se pudo registrar, vuelve a intentar");
+      }
+      console.error("API error:", err.response || err)
+    } finally {
+      setIsLoading(false)
+    }
+  };
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm">
