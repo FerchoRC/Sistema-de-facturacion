@@ -5,6 +5,7 @@ import { Loader2, FileText, DollarSign, Plus, Loader } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
 import Button from "../../components/ui/Button"
+import AllInsightsCard from "../../components/AllInsightsCard"
 
 const Dashboard = () => {
 
@@ -112,6 +113,8 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
+
+      <AllInsightsCard />
 
       <div className="w-full bg-white border border-slate-200 rounded-lg shadow-sm shadow-gray-100 overflow-hidden">
         <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">

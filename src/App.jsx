@@ -34,13 +34,14 @@ const App = () => {
         </Routes>
       </Router>
 
-      <Toaster>
-        toastOptions:{{
+      <Toaster
+        toastOptions={{
           className: "",
           style: {
             fontSize: "13px",
           },
         }}
+      >
       </Toaster>
     </AuthProvider>
   )
