@@ -49,7 +49,7 @@ const ReminderModal = ({isOpen, onClose, invoiceId}) => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-slate-900 flex items-center">
               <Mail className="w-5 h-5 mr-2 text-blue-900" />
-              Recordatorio generado con IA
+              Recordatorio
             </h3>
             <button onClick={onClose} className="text-slate-400 hover:text-slate-600">&times;</button>
           </div>
