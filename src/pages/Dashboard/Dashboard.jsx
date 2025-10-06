@@ -28,10 +28,10 @@ const Dashboard = () => {
 
         const totalInvoices = invoices.length;
         const totalPaid = invoices
-          .filter((inv) => inv.status === "Paid")
+          .filter((inv) => inv.status === "Pagado")
           .reduce((acc, inv) => acc + inv.total, 0);
         const totalUnpaid = invoices
-          .filter((inv) => inv.status !== "Paid")
+          .filter((inv) => inv.status !== "Pagado")
           .reduce((acc, inv) => acc + inv.total, 0);
 
         setStats({ totalInvoices, totalPaid, totalUnpaid });
@@ -153,9 +153,9 @@ const Dashboard = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        invoice.status === "Paid"
+                        invoice.status === "Pagado"
                           ? "bg-emerald-100 text-emerald-800"
-                          : invoice.status === "Pending"
+                          : invoice.status === "Pendiente"
                           ? "bg-amber-100 text-amber-800"
                           : "bg-red-100 text-red-800"
                       }`}>
